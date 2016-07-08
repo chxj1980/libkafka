@@ -1,0 +1,8 @@
+*.o
+*~
+bin/
+object/
+db.lsp
+*.offset
+*.log
+var.mk
