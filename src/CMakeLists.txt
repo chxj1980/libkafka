@@ -2,6 +2,7 @@ set(protocol_SRCS
   TcpConnection.cpp
   Encoder.cpp
   Decoder.cpp
+  Util.cpp
   )
 
 add_compile_options(-std=c++11)
@@ -14,4 +15,4 @@ install(TARGETS kafka-0.1 DESTINATION lib)
 set(HEADERS
   )
 
-install(FILES ${HEADERS} DESTINATION include/liblink)
+install(FILES ${HEADERS} DESTINATION include/libkafka)

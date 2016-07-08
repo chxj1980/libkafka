@@ -11,21 +11,20 @@ namespace libkafka{
 
     char readInt8();
 
-    short int readInt16();
+    short readInt16();
 
     int readInt32();
 
-    long int readInt64();
+    long readInt64();
 
     std::string readString();
 
-    int readBytes(char* buff, int len);//return read length
+    char* readBytes(int len);
 
     private:
     char* buff_;
+    char* start_;
     int total_;
-
-    int index_;
   };
 
 }

@@ -1,35 +1,64 @@
 #include "Decoder.h"
+#include "Util.h"
+#include <arpa/inet.h>
+#include <string.h>
 
 namespace libkafka{
   Decoder::Decoder(char* buff, int len):
     buff_(buff),
-    total_(len),
-    index_(0){
+    start_(buff_),
+    total_(len){
     
   }
   Decoder::~Decoder(){}
 
   char Decoder::readInt8(){
-    return 0;
+    char data = *(char*)start_;
+    start_ += sizeof(char);
+    return data;
   }
 
-  short int Decoder::readInt16(){
-    return 0;
+  short Decoder::readInt16(){
+    short data = *(short*)start_;
+    start_ += sizeof(short);
+    data = ntohs(data);
+    return data;
   }
 
   int Decoder::readInt32(){
-    return 0;
+    int data = *(int*)start_;
+    start_ += sizeof(int);
+    data = ntohl(data);
+    return data;
   }
 
-  long int Decoder::readInt64(){
-    return 0;
+  long Decoder::readInt64(){
+    long data = *(long*)start_;
+    start_ += sizeof(long);
+    data = ntoh64(data);
+    return data;
   }
 
   std::string Decoder::readString(){
-    return std::string();
+    short length = readInt16();
+    std::string data(start_, length);
+    start_ += length;
+    return data;
   }
 
-  int Decoder::readBytes(char* buff, int len){
-    return 0;
+  char* Decoder::readBytes(int len){
+    char* data = start_;
+    start_ += len;
+    return data;
   }
 }
+
+
+
+
+
+
+
+
+
+

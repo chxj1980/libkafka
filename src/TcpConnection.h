@@ -1,6 +1,10 @@
 #pragma once
 
 #include <list>
+#include <mutex>
+#include <thread>
+#include <condition_variable> 
+
 namespace libkafka{
   class TcpConnection{
   public:
@@ -12,6 +16,12 @@ namespace libkafka{
 
     int setRecvTimeout(int sec);
 
+    int setSendTimeout(int sec);
+
+    int keepalive();
+
+    int nodelay();
+
     private:
     const char* ip_;
     short int port_;
@@ -20,12 +30,17 @@ namespace libkafka{
 
   class TcpConnectionPool{
     public:
-    TcpConnectionPool(int max);
+    TcpConnectionPool(int max, const char* ip, short int port);
     ~TcpConnectionPool();
     TcpConnection* getConnection();
     void returnConnection(TcpConnection* conn);
     private:
     std::list<TcpConnection*> pool_;
     int max_;
+    const char* ip_;
+    short int port_;
+    int count_;
+    std::mutex mutex_;
+    std::condition_variable cond_;
   };
 }
