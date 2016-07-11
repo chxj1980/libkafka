@@ -25,6 +25,10 @@ namespace libkafka{
       return start_ - buff_;
     }
 
+    //only should be called when message encode done.
+    void prependSize();
+    
+    
     private:
     char* buff_;
     char* start_;

@@ -6,7 +6,7 @@
 namespace libkafka{
   Encoder::Encoder(char* buff, int len):
     buff_(buff),
-    start_(buff_),
+    start_(buff_ + 4),
     total_(len){
     
   }
@@ -58,5 +58,10 @@ namespace libkafka{
     memcpy(start_, data, len);
     start_ += len;
     return 0;
+  }
+
+  void Encoder::prependSize(){
+    int trans = htonl(size() - 4);
+    memcpy(buff_, &trans, sizeof(trans));
   }
 }

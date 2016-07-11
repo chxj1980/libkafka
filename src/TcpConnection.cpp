@@ -7,6 +7,7 @@
 #include <arpa/inet.h>
 #include <netinet/tcp.h>
 #include <strings.h>
+#include <iostream>
 
 
 namespace libkafka{
