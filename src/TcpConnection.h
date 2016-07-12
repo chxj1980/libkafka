@@ -22,19 +22,19 @@ namespace libkafka{
 
     int nodelay();
 
-    private:
+  private:
     const char* ip_;
     short int port_;
     int fd_;
   };
 
   class TcpConnectionPool{
-    public:
+  public:
     TcpConnectionPool(int max, const char* ip, short int port);
     ~TcpConnectionPool();
     TcpConnection* getConnection();
     void returnConnection(TcpConnection* conn);
-    private:
+  private:
     std::list<TcpConnection*> pool_;
     int max_;
     const char* ip_;
@@ -43,4 +43,34 @@ namespace libkafka{
     std::mutex mutex_;
     std::condition_variable cond_;
   };
+
+  class TcpConnectionGuard{
+    public:
+    TcpConnectionGuard(TcpConnectionPool* pool, TcpConnection* conn):
+      pool_(pool),
+      conn_(conn)
+    {}
+    ~TcpConnectionGuard(){
+      pool_->returnConnection(conn_);
+    }
+    private:
+    TcpConnectionGuard(const TcpConnectionGuard& other);
+    TcpConnectionGuard& operator=(const TcpConnectionGuard& other);
+    TcpConnectionPool* pool_;
+    TcpConnection* conn_;
+  };
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

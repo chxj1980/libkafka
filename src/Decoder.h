@@ -21,7 +21,7 @@ namespace libkafka{
 
     char* readBytes(int len);
 
-    private:
+  private:
     char* buff_;
     char* start_;
     int total_;

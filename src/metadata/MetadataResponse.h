@@ -7,7 +7,7 @@
 
 namespace libkafka{
   class Broker{
-    public:
+  public:
     int read(Decoder* dc);
     
     int nodeId_;
@@ -16,7 +16,7 @@ namespace libkafka{
   };
 
   class PartitionMetadata{
-    public:
+  public:
     int read(Decoder* dc);
     
     short partitionErrorCode_;
@@ -27,7 +27,7 @@ namespace libkafka{
   };
   
   class TopicMetadata{
-    public:
+  public:
     int read(Decoder* dc);
     
     short topicErrorCode_;
@@ -36,13 +36,12 @@ namespace libkafka{
   };
 
   class MetadataResponse : public Response{
-    public:
+  public:
 
     virtual int read(Decoder* dc);
 
     void dump();
-    
-    private:
+   
     std::vector<Broker> brokers_;
     std::vector<TopicMetadata> metadata_;
   };

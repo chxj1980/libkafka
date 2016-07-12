@@ -5,7 +5,7 @@
 
 namespace libkafka{
   class MetadataRequest : public Request{
-    public:
+  public:
     MetadataRequest(int correlationId);
     ~MetadataRequest();
 
@@ -13,7 +13,7 @@ namespace libkafka{
 
     void add(std::string const& topic);
 
-    private:
+  private:
     std::vector<std::string> topics_;
   };
 }

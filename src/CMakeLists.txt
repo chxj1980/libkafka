@@ -8,6 +8,7 @@ set(protocol_SRCS
   metadata/MetadataRequest.cpp
   metadata/MetadataResponse.cpp
   produce/ProduceRequest.cpp
+  client.cpp
   )
 
 add_compile_options(-std=c++11)

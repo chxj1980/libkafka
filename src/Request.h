@@ -5,13 +5,13 @@
 namespace libkafka{
   class Encoder;
   class Request{
-    public:
+  public:
     Request(int correlationId);
     ~Request();
 
     virtual int write(Encoder* ec);
     
-    protected:
+  protected:
     short apiKey_;
     short apiVersion_;
     int correlationId_;

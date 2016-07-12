@@ -29,7 +29,7 @@ namespace libkafka{
     void prependSize();
     
     
-    private:
+  private:
     char* buff_;
     char* start_;
     int total_;

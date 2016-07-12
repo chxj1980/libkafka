@@ -20,6 +20,7 @@ int main(int argc, char** argv){
   Encoder ec(sendbuff, sizeof(sendbuff));
   MetadataRequest metareq(1);
   metareq.add("test");
+  metareq.add("wwwwwwwwww");
   metareq.write(&ec);
   int sendsize = ec.size();
   TcpConnection* conn = pool.getConnection();
