@@ -74,6 +74,8 @@ namespace libkafka{
   }
 
   void Encoder::updateInt32(int data, char *addr){
+    int trans = htonl(data);
+    memcpy(addr, &trans, sizeof(int));
   }
 
   void Encoder::prependSize(){
