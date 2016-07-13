@@ -1,6 +1,7 @@
 set(protocol_SRCS
   TcpConnection.cpp
   Encoder.cpp
+  CalcSize.cpp
   Decoder.cpp
   Util.cpp
   Request.cpp

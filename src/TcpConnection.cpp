@@ -34,33 +34,54 @@ namespace libkafka{
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port_);
     serv_addr.sin_addr.s_addr = inet_addr(ip_);
-    struct timeval timeout{10, 0};
-    fd_set set;
-    FD_ZERO(&set);
-    FD_SET(fd_, &set);
-    fcntl(fd_, F_SETFL, O_NONBLOCK);
+    
+    int flag = fcntl(fd_, F_GETFL, 0);
+    fcntl(fd_, F_SETFL, flag | O_NONBLOCK);
     int ret = 0;
     ret = ::connect(fd_, (struct sockaddr*)&serv_addr, sizeof serv_addr);
-    if(ret < 0 && errno != EINPROGRESS){
-      //handle error
-      return -1;
-    }
-    ret = ::select(fd_ + 1, NULL, &set, NULL, &timeout);
-    switch(ret){
-    case 0:
-      //timeout
-      {
+    if(ret != 0){
+      if(errno != EINPROGRESS){
 	return -1;
+      }else{
+	struct timeval timeout;
+	timeout.tv_sec = 10;
+	timeout.tv_usec = 0;
+	fd_set set;
+	fd_set rset;
+	FD_ZERO(&set);
+	FD_ZERO(&rset);
+	FD_SET(fd_, &set);
+	FD_SET(fd_, &rset);
+	ret = ::select(fd_ + 1, &rset, &set, NULL, &timeout);
+	switch(ret){
+	case 0:
+	  //timeout
+	  {
+	    return -1;
+	  }
+	  break;
+	case -1:
+	  {
+	    return -1;
+	  }
+	  break;
+	case 1:
+	  {
+	    if(FD_ISSET(fd_, &set)){
+	      fcntl(fd_, F_SETFL, flag & ~O_NONBLOCK);
+	      return 0;
+	    }
+	    else {
+	      return -1;
+	    }
+	  }
+	  break;
+	default:
+	  break;
+	}
       }
-      break;
-    default:
-      break;
     }
-    int flag = fcntl(fd_, F_GETFL, 0);
-    fcntl(fd_, F_SETFL, flag & ~O_NONBLOCK);
-    
-    //connected
-    return 0;
+    return -1;
   }
   
   int TcpConnection::send(const char* data, int len){
