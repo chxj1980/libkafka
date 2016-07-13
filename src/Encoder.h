@@ -25,6 +25,12 @@ namespace libkafka{
       return start_ - buff_;
     }
 
+    void beginCrc();
+
+    void endCrc();
+
+    void updateInt32(int data, char* addr);
+
     //only should be called when message encode done.
     void prependSize();
     
@@ -32,6 +38,8 @@ namespace libkafka{
   private:
     char* buff_;
     char* start_;
+    char* crc_start_;
+    char* crc_end_;
     int total_;
   };
 

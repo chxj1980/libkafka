@@ -7,7 +7,9 @@ namespace libkafka{
   Encoder::Encoder(char* buff, int len):
     buff_(buff),
     start_(buff_ + 4),
-    total_(len){
+    total_(len),
+    crc_start_(buff_),
+    crc_end_(crc_start_){
     
   }
   Encoder::~Encoder(){}
@@ -58,6 +60,20 @@ namespace libkafka{
     memcpy(start_, data, len);
     start_ += len;
     return 0;
+  }
+
+  void Encoder::beginCrc(){
+    crc_start_ = start_;
+  }
+
+  void Encoder::endCrc(){
+    crc_end_ = start_;
+    int len = crc_end_ - crc_start_;
+    int crc = crc32((const unsigned char*)crc_start_, len);
+    updateInt32(crc, crc_start_ - sizeof(int));
+  }
+
+  void Encoder::updateInt32(int data, char *addr){
   }
 
   void Encoder::prependSize(){

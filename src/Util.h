@@ -13,4 +13,6 @@ namespace libkafka{
   uint64_t hton64(uint64_t input);
 
   int split(std::string const& str, std::vector<std::string>& ret, std::string sep = ",");
+  
+  uint32_t crc32( const unsigned char *buf, uint32_t size);
 }

@@ -50,10 +50,12 @@ namespace libkafka{
 
   int Message::write(Encoder* ec){
     ec->writeInt32(crc_);
+    ec->beginCrc();
     ec->writeInt8(magicByte_);
     ec->writeInt8(attributes_);
     ec->writeBytes(key_, keyLength_);
     ec->writeBytes(value_, valueLength_);
+    ec->endCrc();
     return 0;
   }
 
