@@ -9,6 +9,7 @@ set(protocol_SRCS
   metadata/MetadataRequest.cpp
   metadata/MetadataResponse.cpp
   produce/ProduceRequest.cpp
+  produce/ProduceResponse.cpp
   client.cpp
   )
 
@@ -27,6 +28,8 @@ set(HEADERS
   Response.h
   metadata/MetadataRequest.h
   metadata/MetadataResponse.h
+  produce/ProduceRequest.h
+  produce/ProduceResponse.h
   )
 
 install(FILES ${HEADERS} DESTINATION include/libkafka)

@@ -3,12 +3,13 @@
 #include <list>
 #include <mutex>
 #include <thread>
-#include <condition_variable> 
+#include <condition_variable>
+#include <string>
 
 namespace libkafka{
   class TcpConnection{
   public:
-    TcpConnection(const char* ip, short int port);
+    TcpConnection(std::string const& ip, short int port);
     ~TcpConnection();
     int connect();
     int send(const char* data, int len);
@@ -23,21 +24,21 @@ namespace libkafka{
     int nodelay();
 
   private:
-    const char* ip_;
+    std::string ip_;
     short int port_;
     int fd_;
   };
 
   class TcpConnectionPool{
   public:
-    TcpConnectionPool(int max, const char* ip, short int port);
+    TcpConnectionPool(int max, std::string const& ip, short int port);
     ~TcpConnectionPool();
     TcpConnection* getConnection();
     void returnConnection(TcpConnection* conn);
   private:
     std::list<TcpConnection*> pool_;
     int max_;
-    const char* ip_;
+    std::string ip_;
     short int port_;
     int count_;
     std::mutex mutex_;

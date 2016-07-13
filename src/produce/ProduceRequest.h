@@ -12,13 +12,16 @@ namespace libkafka{
     int crc_;
     char magicByte_;
     char attributes_;
-    char* key_;
+    const char* key_;
     int keyLength_;
-    char* value_;
+    const char* value_;
     int valueLength_;
+    
     Message(int crc, char magic, char attr,
-	    char* key, int keyLen,
-	    char* value, int valueLen);
+	    const char* key, int keyLen,
+	    const char* value, int valueLen);
+
+    Message(const char* key, int keyLen, const char* value, int valueLen);
     
     int write(Encoder* ec);
 
@@ -30,11 +33,16 @@ namespace libkafka{
   };
   typedef std::shared_ptr<Message> MessagePtr;
 
+  //not support compression now, so offset=0
   class MessageSet{
   public:
     std::vector<MessagePtr> set_;
+    
     void add(MessagePtr message);
+    
     int write(Encoder* ec);
+    
+    int size();
   };
   
   typedef std::shared_ptr<MessageSet> MessageSetPtr;

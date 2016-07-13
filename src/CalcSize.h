@@ -18,6 +18,8 @@ namespace libkafka{
 
     void writeBytes(const char* data, int len);
 
+    void incr(int size);
+
     int size();
   private:
     int index_;

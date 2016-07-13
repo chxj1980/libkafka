@@ -4,6 +4,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <iostream>
 #include "TcpConnection.h"
 #include "metadata/MetadataResponse.h"
 
@@ -19,7 +20,8 @@ namespace libkafka{
     public:
     BrokerLink(Broker const& broker):
       id_(broker.nodeId_),
-      pool_(10, broker.host_.c_str(), broker.port_){}
+      pool_(10, broker.host_.c_str(), broker.port_){
+    }
     
     int id_;
     TcpConnectionPool pool_;

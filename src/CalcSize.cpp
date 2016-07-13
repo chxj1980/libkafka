@@ -31,6 +31,10 @@ namespace libkafka{
     index_ += len;
   }
 
+  void CalcSize::incr(int size){
+    index_ += size;
+  }
+
   int CalcSize::size(){
     return index_;
   }

@@ -10,3 +10,7 @@ target_link_libraries(testSplit kafka)
 add_executable(testClient testClient.cpp)
 LINK_DIRECTORIES(../src)
 target_link_libraries(testClient kafka)
+
+add_executable(testProduce testProduce.cpp)
+LINK_DIRECTORIES(../src)
+target_link_libraries(testProduce kafka)

@@ -11,7 +11,7 @@
 
 
 namespace libkafka{
-  TcpConnection::TcpConnection(const char* ip, short int port):
+  TcpConnection::TcpConnection(std::string const& ip, short int port):
     ip_(ip),
     port_(port),
     fd_(-1){
@@ -33,7 +33,7 @@ namespace libkafka{
     bzero(&serv_addr, sizeof serv_addr);
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(port_);
-    serv_addr.sin_addr.s_addr = inet_addr(ip_);
+    serv_addr.sin_addr.s_addr = inet_addr(ip_.c_str());
     
     int flag = fcntl(fd_, F_GETFL, 0);
     fcntl(fd_, F_SETFL, flag | O_NONBLOCK);
@@ -145,7 +145,7 @@ namespace libkafka{
   }
 
 
-  TcpConnectionPool::TcpConnectionPool(int max, const char* ip, short int port):
+  TcpConnectionPool::TcpConnectionPool(int max, std::string const& ip, short int port):
     max_(max),
     ip_(ip),
     port_(port),
