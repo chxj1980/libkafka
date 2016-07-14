@@ -7,7 +7,7 @@ namespace libkafka{
   class Response{
   public:
     Response();
-    ~Response();
+    virtual ~Response();
 
     virtual int read(Decoder* dc);
   };

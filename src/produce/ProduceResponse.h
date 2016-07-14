@@ -14,7 +14,7 @@ namespace libkafka{
     long offset_;
   };
   
-  class ProduceResponse{
+  class ProduceResponse : public Response{
   public:
     ProduceResponse();
     ~ProduceResponse();

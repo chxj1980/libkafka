@@ -7,7 +7,7 @@ namespace libkafka{
   class Request{
   public:
     Request(int correlationId);
-    ~Request();
+    virtual ~Request();
 
     virtual int write(Encoder* ec);
     
