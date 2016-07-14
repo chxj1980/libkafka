@@ -93,7 +93,7 @@ namespace libkafka{
       res.read(&dc);
       return res.check(topic, partitionId);
     }
-    return -1;
+    return LeaderNotAvailable;
   }
 
 

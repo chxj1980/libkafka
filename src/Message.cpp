@@ -34,7 +34,6 @@ namespace libkafka{
     keyLength_(keyLen),
     value_(value),
     valueLength_(valueLen){
-    //TODO  count crc
   }
 
   int Message::size(){
