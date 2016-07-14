@@ -11,6 +11,7 @@ only support linux 64bit c++11 for now.
 - [ ] group
 - [ ] compression
 - [ ] thread-safe
+- [ ] retry connect
 
 ## install
 ```
