@@ -6,6 +6,7 @@ set(protocol_SRCS
   Util.cpp
   Request.cpp
   Response.cpp
+  Message.cpp
   metadata/MetadataRequest.cpp
   metadata/MetadataResponse.cpp
   produce/ProduceRequest.cpp
@@ -24,12 +25,12 @@ set(HEADERS
   TcpConnection.h
   Encoder.h
   Decoder.h
-  Request.h
+  client.h
   Response.h
-  metadata/MetadataRequest.h
-  metadata/MetadataResponse.h
-  produce/ProduceRequest.h
-  produce/ProduceResponse.h
+  Request.h
   )
 
 install(FILES ${HEADERS} DESTINATION include/libkafka)
+
+add_subdirectory(produce)
+add_subdirectory(metadata)

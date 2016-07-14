@@ -45,7 +45,7 @@ namespace libkafka{
     return 0;
   }
 
-  int Client::produce(std::string const& topic, int partitionId,
+  int Client::produce(std::string const& topic, int partitionId, int correlationId,
 		      const char* key, int key_length,
 		      const char* msg, int msg_length,
 		      char* extern_buff, int buff_length){
@@ -64,7 +64,6 @@ namespace libkafka{
       MessagePtr messagePtr(new Message(key, key_length, msg, msg_length));
       MessageSetPtr setPtr(new MessageSet);
       setPtr->add(messagePtr);
-      int correlationId = 0;
       ProduceRequest req(correlationId);
       req.add(topic, partitionId, setPtr);
       Encoder ec(extern_buff, buff_length);
@@ -73,32 +72,28 @@ namespace libkafka{
       TcpConnection* conn = leader_link->pool_.getConnection();
       TcpConnectionGuard guard(&(leader_link->pool_), conn);
       if(conn == 0){
-	std::cout << "connect failed...," << leader_link->id_  << std::endl;
-	return -1;
+	return CONNECT_FAILED;
       }
       ret = conn->send(extern_buff, sendSize);
       if(ret == -1){
-	std::cout << "send failed" << std::endl;
-	return -1;
+	return SEND_FAILED;
       }
       int netValue = -1;
       ret = conn->recv((char*)&netValue, sizeof(int));
       if(ret == -1){
-	std::cout << "read response size failed" << std::endl;
-	return -1;
+	return RECV_FAILED;
       }
       int recvBytes = ntohl(netValue);
       ret = conn->recv(recvbuff, recvBytes);
       if(ret == -1){
-	std::cout << "read response failed" << std::endl;
-	return -1;
+	return RECV_FAILED;
       }
       Decoder dc(recvbuff, recvBytes);
       ProduceResponse res;
       res.read(&dc);
-      std::cout << res.check(topic, partitionId) << std::endl;
+      return res.check(topic, partitionId);
     }
-    return 0;
+    return -1;
   }
 
 

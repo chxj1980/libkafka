@@ -43,7 +43,7 @@ namespace libkafka{
     
     BrokerLink* tryGetLeader(std::string const& topic, int partitionId);
 
-    int produce(std::string const& topic, int partitionId,
+    int produce(std::string const& topic, int partitionId, int correlationId,
 		const char* key, int key_length,
 		const char* msg, int msg_length,
 		char* extern_buff, int buff_length);

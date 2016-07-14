@@ -52,7 +52,8 @@ namespace libkafka{
       conn_(conn)
     {}
     ~TcpConnectionGuard(){
-      pool_->returnConnection(conn_);
+      if(pool_)
+	pool_->returnConnection(conn_);
     }
     private:
     TcpConnectionGuard(const TcpConnectionGuard& other);

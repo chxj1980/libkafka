@@ -1,4 +1,4 @@
-#include "../src/client.h"
+#include <libkafka/client.h>
 #include <iostream>
 #include <string.h>
 
@@ -17,13 +17,3 @@ int main(int argc, char** argv){
   c.produce("test", 1, 1, key, keyLength, msg, msgLength, buff, sizeof(buff));
   return 0;
 }
-
-
-
-
-
-
-
-
-
-
