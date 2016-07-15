@@ -173,6 +173,8 @@ namespace libkafka{
 	++count_;
 	conn->keepalive();
 	conn->nodelay();
+	conn->setSendTimeout(5);
+        conn->setRecvTimeout(5);
 	return conn;
       }else{
 	cond_.wait(lock, [&]() -> bool {return !pool_.empty();});

@@ -6,6 +6,7 @@
 #include <memory>
 #include <iostream>
 #include "TcpConnection.h"
+#include "Message.h"
 #include "metadata/MetadataResponse.h"
 
 namespace libkafka{
@@ -47,6 +48,8 @@ namespace libkafka{
 		const char* key, int key_length,
 		const char* msg, int msg_length,
 		char* extern_buff, int buff_length);
+
+    int produce(std::string const& topic, int partitionId, int correlationId, MessageSetPtr setPtr, char* extern_buff, int buff_length);
 
     int getPartitionNum(std::string const& topic);
 

@@ -18,3 +18,7 @@ target_link_libraries(testProduce kafka)
 add_executable(produce_performance produce_performance.cpp)
 LINK_DIRECTORIES(../src)
 target_link_libraries(produce_performance kafka)
+
+add_executable(batch_produce_performance batch_produce_performance.cpp)
+LINK_DIRECTORIES(../src)
+target_link_libraries(batch_produce_performance kafka)

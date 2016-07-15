@@ -96,6 +96,51 @@ namespace libkafka{
     return LeaderNotAvailable;
   }
 
+  int Client::produce(std::string const& topic, int partitionId, int correlationId, MessageSetPtr setPtr, char* extern_buff, int buff_length){
+    int ret = 0;
+    BrokerLink* leader_link = tryGetLeader(topic, partitionId);
+    if(leader_link == 0){
+      ret = getMetadata(topic);
+      if (ret != 0){
+	return ret;
+      }
+      leader_link = tryGetLeader(topic, partitionId);
+    }
+    if(leader_link){
+      //produce
+      char recvbuff[2048] = {0};
+      ProduceRequest req(correlationId);
+      req.add(topic, partitionId, setPtr);
+      Encoder ec(extern_buff, buff_length);
+      req.write(&ec);
+      int sendSize = ec.size();
+      TcpConnection* conn = leader_link->pool_.getConnection();
+      TcpConnectionGuard guard(&(leader_link->pool_), conn);
+      if(conn == 0){
+	return CONNECT_FAILED;
+      }
+      ret = conn->send(extern_buff, sendSize);
+      if(ret == -1){
+	return SEND_FAILED;
+      }
+      int netValue = -1;
+      ret = conn->recv((char*)&netValue, sizeof(int));
+      if(ret == -1){
+	return RECV_FAILED;
+      }
+      int recvBytes = ntohl(netValue);
+      ret = conn->recv(recvbuff, recvBytes);
+      if(ret == -1){
+	return RECV_FAILED;
+      }
+      Decoder dc(recvbuff, recvBytes);
+      ProduceResponse res;
+      res.read(&dc);
+      return res.check(topic, partitionId);
+    }
+    return LeaderNotAvailable;
+  }
+
 
   int Client::getPartitionNum(std::string const& topic){
     return 0;
@@ -108,6 +153,8 @@ namespace libkafka{
       return CONNECT_FAILED;
     }
     conn.nodelay();
+    conn.setRecvTimeout(5);
+    conn.setSendTimeout(5);
     char sendbuff[1024] = {0};
     char recvbuff[2048] = {0};
     Encoder ec(sendbuff, sizeof(sendbuff));
